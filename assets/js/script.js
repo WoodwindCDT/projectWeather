@@ -1,4 +1,3 @@
-// API KEY d137f08c46cdb94d7d0aa58a6e5c6fba
 // api.openweathermap.org/data/2.5/forecast?q={city name}&appid={your api key}
 
 // GIVEN a weather dashboard with form inputs
@@ -13,7 +12,11 @@
 // WHEN I click on a city in the search history
 // THEN I am again presented with current and future conditions for that city
 
-// Date format at the top
+// Global Variables
+var cityInputEl = document.querySelector("#city");
+var userFormEl = document.querySelector("#user-form");
+
+// Date format for jumbo-tron
 $(document).ready(function() {
 
 // Current Date from Moment
@@ -25,8 +28,10 @@ $(pageDate).text(now);
 
 });
 
+// Function to manipulate API link to add custom city search
+// which user will type in EX: name = city, city = Houston
 var getWeatherInfo = function(name) {
-    var apiURL ="https://api.openweathermap.org/data/2.5/forecast?q=" + name + "/&appid=d137f08c46cdb94d7d0aa58a6e5c6fba";
+    var apiURL ="https://api.openweathermap.org/data/2.5/forecast?q=" + name + "&appid=d137f08c46cdb94d7d0aa58a6e5c6fba";
 
     fetch(apiURL)
     .then(function(response) {
@@ -36,12 +41,35 @@ var getWeatherInfo = function(name) {
                 console.log(data);
             });
         } else {
+            // Error 400 ^ EX: City not found or incorrect characters
             alert("Error: " + response.statusText);
         };
     })
+    // Error 500 ^ EX: Most likely internet issues
     .catch(function(error) {
         // To notify user of connection issue to Weather API
         alert("Unable to connect to Weather API");
     });
+};
+
+var userSubmitHandler = function() {
+    // To prevent default page reloading
+    event.preventDefault();
+
+    // User City Input
+    var cityName = cityInputEl.value.trim();
+
+    // If statement to clear text
+    // && to tell user they must enter a city
+    if (cityName) {
+        cityInputEl.textContent = "";
+        getWeatherInfo(cityName);
+    } else {
+        alert("Please enter a city name :)")
+    }
+
+
 
 };
+
+userFormEl.addEventListener("submit", userSubmitHandler);
