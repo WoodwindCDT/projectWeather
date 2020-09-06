@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css"/>
+    <title>Weather Dashboard &#127780</title>
+</head>
+<body>
+    <header class="jumbotron" style="background-color: rgb(230, 239, 255);">
+        <h1>Welcome to Weather Dash!</h1>
+        <h2>An app for your weather needs On-The-Go.</h2>
+        <p id="currentDay" class="lead"></p>
+    </header>
+
+    <main class="flex-row justify-space-between">
+        <div class="col-12 col-md-4">
+            <div class="card">
+                <h3 class="card-header bg-warning text-black">Enter a City Name:</h3>
+                <form id="user-form" class="card-body">
+                    <input name="username" id="username" type="text" autofocus="true" class="form-input w-100" style="height: 40px; margin: 5px 0; outline: none;"/>
+                    <button type="submit" class="btn btn-primary w-100 text-white"><span class="oi oi-magnifying-glass"></span></button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4" id="historyContainer"></div>
+
+        <div class="col-12 col-md-8"></div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>
