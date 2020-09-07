@@ -18,16 +18,22 @@
     <main class="flex-row justify-space-between">
         <div class="col-12 col-md-4">
             <div class="card">
-                <h3 class="card-header bg-warning text-black">Enter a City Name: <span class="user-form-input"></span></h3>
+                <h3 class="card-header bg-warning text-black">Enter a City Name Here</h3>
                 <form id="user-form" class="card-body">
                     <input name="city" id="city" type="text" autofocus="true" class="form-input w-100" style="height: 40px; margin: 5px 0; outline: none;" placeholder="US Locations Only"/>
-                    <button type="submit" class="btn btn-primary w-100 text-white"><span class="oi oi-magnifying-glass"></span></button>
+                    <button type="submit" class="btn btn-primary w-100 text-white submit-button"><span class="oi oi-magnifying-glass"></span></button>
                 </form>
             </div>
         </div>
 
-        <div class="col-12 col-md-4">
-            <ul id="historyContainer"></ul>
+        <div class="col-12 col-md-4" style="margin-top: 40px;">
+            <div class="list-group" style="font-size: 20px;">
+                <h3 class="card-header bg-success text-black history-container">Your History</h3>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4" style="margin-top: 40px;">
+            <button class="btn btn-danger w-100 remove-history" style="color: black;">Clear History</button>
         </div>
 
         <div class="col-12 col-md-8" id="weather-content"></div>

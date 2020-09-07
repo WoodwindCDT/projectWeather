@@ -1,17 +1,3 @@
-// api.openweathermap.org/data/2.5/forecast?q={city name}&appid={your api key}
-
-// GIVEN a weather dashboard with form inputs
-// WHEN I search for a city
-// THEN I am presented with current and future conditions for that city and that city is added to the search history
-// WHEN I view current weather conditions for that city
-// THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
-// WHEN I view the UV index
-// THEN I am presented with a color that indicates whether the conditions are favorable, moderate, or severe
-// WHEN I view future weather conditions for that city
-// THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, and the humidity
-// WHEN I click on a city in the search history
-// THEN I am again presented with current and future conditions for that city
-
 // Global Variables
 var searchHistory = [];
 var cityInputEl = document.querySelector("#city");
@@ -38,10 +24,6 @@ var getHistory = function() {
 
     // To cycle through History Data
     for (var i = 0; i < searchHistory.length; i++) {
-        // Statement to prevent anymore than 6 cities to append
-        if (i = 6)
-        break;
-
         // Creating listed-item links for each Searched City 'to 6'
         cityLink = $("<a>").attr({
             class: "list-group-item list-group-item-action",
@@ -51,6 +33,12 @@ var getHistory = function() {
         // Appending Listed Items with class of list-group
         cityLink.text(searchHistory[i]);
         $(".list-group").append(cityLink);
+
+        // To create function to call getHistory();
+        $(".list-group-item").click(function() {
+        cityName = $(this).text();
+        getWeatherInfo(cityName);
+        });
     };
 };
 
@@ -79,23 +67,44 @@ var getWeatherInfo = function(name) {
 };
 
 var userSubmitHandler = function() {
-    // To prevent default page reloading
-    event.preventDefault();
-
     // User City Input
     var cityName = cityInputEl.value.trim();
+
+    //getWeatherData();
+
+    var checkHistory = searchHistory.includes(cityName);
+    if (checkHistory == true) {
+        return;
+    }
+    else {
+        searchHistory.push(cityName);
+        localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+
+        var cityLink = $("<a>").attr({
+            // list-group-item-action keeps the search history buttons consistent
+            class: "list-group-item list-group-item-action",
+            href: "#"
+        });
+
+        cityLink.text(cityName);
+        $(".list-group").append(cityLink);
+    };
 
     // If statement to clear text
     // && to tell user they must enter a city
     if (cityName) {
         cityInputEl.value = "";
-        getWeatherInfo(cityName);
     } else {
         alert("Please enter a city name :)")
     }
-
-
-
 };
 
+$(".remove-history").click(function() {
+    window.localStorage.clear();
+    event.preventDefault();
+    $(".list-group-item").remove();
+    location.reload();
+});
+
 userFormEl.addEventListener("submit", userSubmitHandler);
+getHistory();
