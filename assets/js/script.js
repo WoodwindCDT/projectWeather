@@ -13,6 +13,7 @@
 // THEN I am again presented with current and future conditions for that city
 
 // Global Variables
+var searchHistory = [];
 var cityInputEl = document.querySelector("#city");
 var userFormEl = document.querySelector("#user-form");
 
@@ -27,6 +28,31 @@ let pageDate = $('#currentDay');
 $(pageDate).text(now);
 
 });
+
+// Function to populate History List of cities
+var getHistory = function() {
+    var savedCity = JSON.parse(localStorage.getItem("searchHistory"));
+    if (savedCity !== null) {
+        searchHistory = savedCity;
+    };
+
+    // To cycle through History Data
+    for (var i = 0; i < searchHistory.length; i++) {
+        // Statement to prevent anymore than 6 cities to append
+        if (i = 6)
+        break;
+
+        // Creating listed-item links for each Searched City 'to 6'
+        cityLink = $("<a>").attr({
+            class: "list-group-item list-group-item-action",
+            href: "#"
+        });
+    
+        // Appending Listed Items with class of list-group
+        cityLink.text(searchHistory[i]);
+        $(".list-group").append(cityLink);
+    };
+};
 
 // Function to manipulate API link to add custom city search
 // which user will type in EX: name = city, city = Houston
@@ -62,7 +88,7 @@ var userSubmitHandler = function() {
     // If statement to clear text
     // && to tell user they must enter a city
     if (cityName) {
-        cityInputEl.textContent = "";
+        cityInputEl.value = "";
         getWeatherInfo(cityName);
     } else {
         alert("Please enter a city name :)")
