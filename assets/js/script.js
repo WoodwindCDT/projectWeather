@@ -17,36 +17,28 @@ $(pageDate).text(now);
 
 });
 
-$(".remove-history").click(function() {
-    window.localStorage.clear();
-    $(".list-group-item").remove();
-    location.reload();
-});
-
 // Function to populate History List of cities
-var getHistory = function() {
+function getHistory() {
     var savedCity = JSON.parse(localStorage.getItem("searchHistory"));
     if (savedCity !== null) {
         searchHistory = savedCity;
-    };
+    }
 
     // To cycle through History Data
     for (var i = 0; i < searchHistory.length; i++) {
-        // Creating listed-item links for each Searched City 'to 6'
-        cityLink = $("<a>").attr({
-            class: "list-group-item list-group-item-action",
-            href: "#"
-        });
+        if (i == 7) {
+            break;
+        } else {
+            // Creating listed-item links for each Searched City 'to 7'
+            cityLink = $("<a>").attr({
+                class: "list-group-item list-group-item-action",
+                href: "javascript:void(0);"
+            });
     
-        // Appending Listed Items with class of list-group
-        cityLink.text(searchHistory[i]);
-        $(".list-group").append(cityLink);
-
-        // To create function to call getHistory();
-        $(".list-group-item").click(function() {
-        cityName = $(this).text();
-        getWeatherInfo(cityName);
-        });
+            // Appending Listed Items with class of list-group
+            cityLink.text(searchHistory[i]);
+            $(".list-group").append(cityLink);
+        };
     };
 };
 
@@ -129,7 +121,7 @@ var getWeatherInfo = function(name) {
         }).then(function(response) {
             for (var i = 0; i < 5; i++) {
                 // To create columns
-                var newCard = $("<div>").attr("class", "col bg-primary text-white rounded-lg column-days");
+                var newCard = $("<div>").attr("class", "col bg-info text-white rounded-lg column-days");
                 $("#weekly-forecast").append(newCard);
 
                 // To create a date for each day using help from Moment.JS
@@ -157,10 +149,18 @@ var getWeatherInfo = function(name) {
 };
 
 var userSubmitHandler = function() {
+    event.preventDefault();
     // User City Input
     var cityName = cityInputEl.value.trim();
 
-    getWeatherInfo();
+    // If statement to clear text
+    // && to tell user they must enter a city
+    if (cityName) {
+        cityInputEl.value = "";
+        getWeatherInfo(cityName);
+    } else {
+        alert("Please enter a city name :)")
+    }
 
     var checkHistory = searchHistory.includes(cityName);
     if (checkHistory == true) {
@@ -173,21 +173,25 @@ var userSubmitHandler = function() {
         var cityLink = $("<a>").attr({
             // list-group-item-action keeps the search history buttons consistent
             class: "list-group-item list-group-item-action",
-            href: "#"
+            href: "javascript:void(0);"
         });
 
         cityLink.text(cityName);
         $(".list-group").append(cityLink);
     };
-
-    // If statement to clear text
-    // && to tell user they must enter a city
-    if (cityName) {
-        cityInputEl.value = "";
-        getWeatherInfo(cityName);
-    } else {
-        alert("Please enter a city name :)")
-    }
 };
+
+// To create function to call getHistory();
+$(".list-group-item").click(function() {
+    cityName = $(this).text();
+    getWeatherInfo(cityName);
+});
+
+// Clear Task Button 
+$(".remove-history").click(function() {
+    window.localStorage.clear();
+    $(".list-group-item").remove();
+    location.reload();
+});
 
 userFormEl.addEventListener("submit", userSubmitHandler);
