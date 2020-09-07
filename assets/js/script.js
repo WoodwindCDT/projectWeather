@@ -64,7 +64,8 @@ var getWeatherInfo = function(name) {
         // To get icon img from weatherAPi Source
         var iconURL = "http://openweathermap.org/img/w/" + icon + ".png";
 
-        var cardTitle = $("<h3>")
+        var cardTitle = $("<h7>")
+        .addClass("titleWeather")
         .text(name);
         
         // To append to card body
