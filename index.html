@@ -9,44 +9,55 @@
     <title>Weather Dashboard &#127780</title>
 </head>
 <body>
+    <!-- Header/Jumbotron -->
     <header class="jumbotron" style="background-color: rgb(230, 239, 255);">
         <h1>Welcome to Weather Dash!</h1>
         <h2>Your weather On-The-Go.</h2>
         <p id="currentDay" class="lead" style="font-weight: 600;"></p>
     </header>
 
+    <!-- Main Site Data with All Containers -->
     <main class="flex-row justify-space-between container-fluid">
             <div class="col-md-6 center">
+                <!-- Form Card for User Input -->
                 <div class="card">
                     <h3 class="card-header bg-warning text-black">Enter a City Name Here</h3>
                     <form id="user-form" class="card-body">
+                        <!-- Text-Box -->
                     <input name="city" id="city" type="text" autofocus="true" class="form-input w-100" style="height: 40px; margin: 5px 0; outline: none;" placeholder="US Locations Only"/>
+                        <!-- Button -->
                     <button type="submit" class="btn btn-primary w-100 text-white submit-button"><span class="oi oi-magnifying-glass"></span></button>
                     </form>
                 </div>
             </div>
 
+            <!-- Card Body/Container for Daily-Single Forecast Fetch -->
             <div class="col-md-5 card center">
                 <div class="card-body" id="daily-forecast"></div>
             </div>
+            <!-- Card Body/Container for Weekly Forecast Fetch -->
+            <div class="card card-body">
             <div><h4 style="text-align: center;">Weekly Forecast</h4></div>
-            <!-- five day -->
+            
+            <!-- Card Body/Container/Row for Weekly Forecast Columns -->
             <div id="weekly-forecast" class="row"></div>
+            </div>
 
+            <!-- Card-Body/List-Group for User History -->
             <div class="col-md-3 center" style="margin-top: 40px;">
                 <div class="list-group" style="font-size: 20px;">
                     <h3 class="card-header bg-success text-black history-container">Your History</h3>
                 </div>
             </div>
-
+            <!-- Delete button to clear all history & localStorage -->
             <div class="col-md-2 center" style="margin-top: 40px;">
                 <button class="btn btn-danger w-100 remove-history" style="color: black;">Clear History</button>
             </div>
     </main>
 
+    <!-- Script -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="./assets/js/script.js"></script>
 </body>
-
 </html>

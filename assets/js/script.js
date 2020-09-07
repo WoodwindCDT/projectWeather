@@ -50,6 +50,7 @@ var getHistory = function() {
     };
 };
 
+getHistory();
 // Function to manipulate API link to add custom city search
 // which user will type in EX: name = city, city = Houston
 var getWeatherInfo = function(name) {
@@ -64,6 +65,7 @@ var getWeatherInfo = function(name) {
         url: apiURL,
         method: "GET"
     }).then(function(response) {
+
         // To create var for iconCode manipulation
         var icon = response.weather[0].icon;
 
@@ -158,7 +160,7 @@ var userSubmitHandler = function() {
     // User City Input
     var cityName = cityInputEl.value.trim();
 
-    //getWeatherData();
+    getWeatherInfo();
 
     var checkHistory = searchHistory.includes(cityName);
     if (checkHistory == true) {
@@ -189,4 +191,3 @@ var userSubmitHandler = function() {
 };
 
 userFormEl.addEventListener("submit", userSubmitHandler);
-getHistory();
