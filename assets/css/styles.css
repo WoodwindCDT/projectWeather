@@ -41,6 +41,11 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 
+.forecastDate {
+    font-weight: 600;
+    font-size: 20px;
+}
+
 .titleWeather {
     font-weight: 700;
     margin: 0;

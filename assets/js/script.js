@@ -127,7 +127,9 @@ var getWeatherInfo = function(name) {
 
                 // To create a date for each day using help from Moment.JS
                 var myDate = new Date(response.list[i * 8].dt * 1000);
-                newCard.append($("<h4>").html(myDate.toLocaleDateString()));
+                newCard.append($("<h7>")
+                .addClass("forecastDate")
+                .html(myDate.toLocaleDateString()));
 
                 // To get icon corresponding to weather each day
                 var icon = response.list[i * 8].weather[0].icon;
