@@ -2,7 +2,8 @@
 var searchHistory = [];
 var cityInputEl = document.querySelector("#city");
 var userFormEl = document.querySelector("#user-form");
-var date = moment().format(" MM/DD/YYYY");
+var date = moment().format("MM/DD/YYYY");
+var mainCard = $("#daily-forecast");
 
 // Date format for jumbo-tron
 $(document).ready(function() {
@@ -14,6 +15,12 @@ const now = moment().format('LL');
 let pageDate = $('#currentDay');
 $(pageDate).text(now);
 
+});
+
+$(".remove-history").click(function() {
+    window.localStorage.clear();
+    $(".list-group-item").remove();
+    location.reload();
 });
 
 // Function to populate History List of cities
@@ -43,16 +50,15 @@ var getHistory = function() {
     };
 };
 
-var mainCard = $("#daily-forecast");
 // Function to manipulate API link to add custom city search
 // which user will type in EX: name = city, city = Houston
 var getWeatherInfo = function(name) {
-    // Api URL for single most up-to-date weather
-    var apiURL = "https://api.openweathermap.org/data/2.5/weather?q=" + name + "&appid=d137f08c46cdb94d7d0aa58a6e5c6fba";
-
     // To remove content from container
     $("#weekly-forecast").empty();
     $("#daily-forecast").empty();
+    
+    // Api URL for single most up-to-date weather
+    var apiURL = "https://api.openweathermap.org/data/2.5/weather?q=" + name + "&appid=d137f08c46cdb94d7d0aa58a6e5c6fba";
 
     $.ajax({
         url: apiURL,
@@ -112,6 +118,7 @@ var getWeatherInfo = function(name) {
                 $("i").attr("class", "btn btn-outline-danger");
             };
         });
+
         // To fetch for Weekly "5-Day" ForeCast
         $.ajax({
             url: "https://api.openweathermap.org/data/2.5/forecast?q=" + name + "&appid=d137f08c46cdb94d7d0aa58a6e5c6fba",
@@ -120,7 +127,7 @@ var getWeatherInfo = function(name) {
         }).then(function(response) {
             for (var i = 0; i < 5; i++) {
                 // To create columns
-                var newCard = $("<div>").attr("class", "col fiveDay bg-primary text-white rounded-lg p-2");
+                var newCard = $("<div>").attr("class", "col bg-primary text-white rounded-lg column-days");
                 $("#weekly-forecast").append(newCard);
 
                 // To create a date for each day using help from Moment.JS
@@ -135,11 +142,11 @@ var getWeatherInfo = function(name) {
                 newCard.append($("<img>").attr("src", iconURL));
 
                 // To set CityTemp and calculate correct Temp && Append *again
-                var cityTemp = Math.round((response.main.temp - 276) * 1.80 + 32);
-                mainCard.append($("<p>").html("Temperature: " + cityTemp + " &#8457"));
+                var cityTemp = Math.round((response.list[i * 8].main.temp - 276) * 1.80 + 32);
+                newCard.append($("<p>").html("Temperature: " + cityTemp + " &#8457"));
             
                 // To set CityHumidity
-                var cityHumid = response.list[i * 8].main.cityHumid;
+                var cityHumid = response.list[i * 8].main.humidity;
                 // displays humidity
                 newCard.append($("<p>").html("Humidity: " + cityHumid + "%"));
             };
@@ -181,12 +188,5 @@ var userSubmitHandler = function() {
     }
 };
 
-$(".remove-history").click(function() {
-    window.localStorage.clear();
-    event.preventDefault();
-    $(".list-group-item").remove();
-    location.reload();
-});
-
-userFormEl.addEventListener("submit", userSubmitHandler, getWeatherInfo);
+userFormEl.addEventListener("submit", userSubmitHandler);
 getHistory();
