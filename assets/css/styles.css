@@ -9,6 +9,12 @@
     --third: #FED766;
 }
 
+.center {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -39,4 +45,9 @@ h1, h2, h3, h4, h5, h6 {
 
 p {
     font-size: 1.2rem;
+}
+
+.fiveDay{    
+    background-color: royalblue;
+    margin: 15px;
 }

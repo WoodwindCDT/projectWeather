@@ -2,6 +2,7 @@
 var searchHistory = [];
 var cityInputEl = document.querySelector("#city");
 var userFormEl = document.querySelector("#user-form");
+var date = moment().format(" MM/DD/YYYY");
 
 // Date format for jumbo-tron
 $(document).ready(function() {
@@ -42,27 +43,107 @@ var getHistory = function() {
     };
 };
 
+var mainCard = $("#daily-forecast");
 // Function to manipulate API link to add custom city search
 // which user will type in EX: name = city, city = Houston
 var getWeatherInfo = function(name) {
-    var apiURL ="https://api.openweathermap.org/data/2.5/forecast?q=" + name + "&appid=d137f08c46cdb94d7d0aa58a6e5c6fba";
+    // Api URL for single most up-to-date weather
+    var apiURL = "https://api.openweathermap.org/data/2.5/weather?q=" + name + "&appid=d137f08c46cdb94d7d0aa58a6e5c6fba";
 
-    fetch(apiURL)
-    .then(function(response) {
-        if(response.ok) {
-            response.json()
-            .then(function(data) {
-                console.log(data);
-            });
-        } else {
-            // Error 400 ^ EX: City not found or incorrect characters
-            alert("Error: " + response.statusText);
-        };
-    })
-    // Error 500 ^ EX: Most likely internet issues
-    .catch(function(error) {
-        // To notify user of connection issue to Weather API
-        alert("Unable to connect to Weather API");
+    // To remove content from container
+    $("#weekly-forecast").empty();
+    $("#daily-forecast").empty();
+
+    $.ajax({
+        url: apiURL,
+        method: "GET"
+    }).then(function(response) {
+        // To create var for iconCode manipulation
+        var icon = response.weather[0].icon;
+
+        // To get icon img from weatherAPi Source
+        var iconURL = "http://openweathermap.org/img/w/" + icon + ".png";
+
+        var cardTitle = $("<h3>")
+        .text(name);
+        
+        // To append to card body
+        mainCard.prepend(cardTitle);
+
+        // To append the Icon as an IMG
+        mainCard.append($("<img>")
+        .attr("src", iconURL));
+
+        // To set CityTemp and calculate correct Temp && Append
+        var cityTemp = response.main.temp;
+        var cityTemp = Math.round((response.main.temp - 276) * 1.80 + 32);
+        mainCard.append($("<p>").html("Temperature: " + cityTemp + " &#8457"));
+
+        // To set CityHumidity
+        var cityHumid = response.main.humidity;
+        mainCard.append($("<p>").html("Humidity: " + cityHumid + "%"));
+
+        // To set CitySpeed
+        var citySpeed = response.wind.speed;
+        mainCard.append($("<p>").html("Wind Speed: " + citySpeed + " MPH"));
+
+        // To retrieve UVInded we need LAT/LONGITUDE
+        // Fetch and transfer data through new API
+        var lat = response.coord.lat;
+        var lon = response.coord.lon;
+
+        $.ajax({
+            url: "https://api.openweathermap.org/data/2.5/uvi?appid=d137f08c46cdb94d7d0aa58a6e5c6fba&lat=" + lat + "&lon=" + lon,
+            method: "GET"
+            })
+            .then(function(response) {
+            // To display UVIndex in main Card Body
+            mainCard.append($("<p>").html("UV Index: <i>" + response.value + "</i>"));
+
+            // To create UVIndex background based on the data given
+            // Severity = higher number (closer to danger colors) <>
+            if (response.value <= 2) {
+                $("i").attr("class", "btn btn-outline-success");
+            };
+            if (response.value > 2 && response.value <= 5) {
+                $("i").attr("class", "btn btn-outline-warning");
+            };
+            if (response.value > 5) {
+                $("i").attr("class", "btn btn-outline-danger");
+            };
+        });
+        // To fetch for Weekly "5-Day" ForeCast
+        $.ajax({
+            url: "https://api.openweathermap.org/data/2.5/forecast?q=" + name + "&appid=d137f08c46cdb94d7d0aa58a6e5c6fba",
+            method: "GET"
+        // To display 5 separate columns from the forecast response
+        }).then(function(response) {
+            for (var i = 0; i < 5; i++) {
+                // To create columns
+                var newCard = $("<div>").attr("class", "col fiveDay bg-primary text-white rounded-lg p-2");
+                $("#weekly-forecast").append(newCard);
+
+                // To create a date for each day using help from Moment.JS
+                var myDate = new Date(response.list[i * 8].dt * 1000);
+                newCard.append($("<h4>").html(myDate.toLocaleDateString()));
+
+                // To get icon corresponding to weather each day
+                var icon = response.list[i * 8].weather[0].icon;
+                // To get icon from the API
+                var iconURL = "http://openweathermap.org/img/w/" + icon + ".png";
+                // To append the Icon as an IMG
+                newCard.append($("<img>").attr("src", iconURL));
+
+                // To set CityTemp and calculate correct Temp && Append *again
+                var cityTemp = Math.round((response.main.temp - 276) * 1.80 + 32);
+                mainCard.append($("<p>").html("Temperature: " + cityTemp + " &#8457"));
+            
+                // To set CityHumidity
+                var cityHumid = response.list[i * 8].main.cityHumid;
+                // displays humidity
+                newCard.append($("<p>").html("Humidity: " + cityHumid + "%"));
+            };
+        });
     });
 };
 
@@ -94,6 +175,7 @@ var userSubmitHandler = function() {
     // && to tell user they must enter a city
     if (cityName) {
         cityInputEl.value = "";
+        getWeatherInfo(cityName);
     } else {
         alert("Please enter a city name :)")
     }
@@ -106,5 +188,5 @@ $(".remove-history").click(function() {
     location.reload();
 });
 
-userFormEl.addEventListener("submit", userSubmitHandler);
+userFormEl.addEventListener("submit", userSubmitHandler, getWeatherInfo);
 getHistory();

@@ -11,32 +11,39 @@
 <body>
     <header class="jumbotron" style="background-color: rgb(230, 239, 255);">
         <h1>Welcome to Weather Dash!</h1>
-        <h2>An app for your weather needs On-The-Go.</h2>
-        <p id="currentDay" class="lead"></p>
+        <h2>Your weather On-The-Go.</h2>
+        <p id="currentDay" class="lead" style="font-weight: 600;"></p>
     </header>
 
-    <main class="flex-row justify-space-between">
-        <div class="col-12 col-md-4">
-            <div class="card">
-                <h3 class="card-header bg-warning text-black">Enter a City Name Here</h3>
-                <form id="user-form" class="card-body">
+    <main class="flex-row justify-space-between container-fluid">
+            <div class="col-md-6 center">
+                <div class="card">
+                    <h3 class="card-header bg-warning text-black">Enter a City Name Here</h3>
+                    <form id="user-form" class="card-body">
                     <input name="city" id="city" type="text" autofocus="true" class="form-input w-100" style="height: 40px; margin: 5px 0; outline: none;" placeholder="US Locations Only"/>
                     <button type="submit" class="btn btn-primary w-100 text-white submit-button"><span class="oi oi-magnifying-glass"></span></button>
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
 
-        <div class="col-12 col-md-4" style="margin-top: 40px;">
-            <div class="list-group" style="font-size: 20px;">
-                <h3 class="card-header bg-success text-black history-container">Your History</h3>
+            <div class="col-md-5 card center">
+                <div class="card-body" id="daily-forecast"></div>
             </div>
-        </div>
+            <div class="col-md-5 card center">
+            <h4 >Weekly Forecast</h4>
+            </div>
+            <!-- five day -->
+            <div id="weekly-forecast" class="row"></div>
 
-        <div class="col-12 col-md-4" style="margin-top: 40px;">
-            <button class="btn btn-danger w-100 remove-history" style="color: black;">Clear History</button>
-        </div>
+            <div class="col-md-3 center" style="margin-top: 40px;">
+                <div class="list-group" style="font-size: 20px;">
+                    <h3 class="card-header bg-success text-black history-container">Your History</h3>
+                </div>
+            </div>
 
-        <div class="col-12 col-md-8" id="weather-content"></div>
+            <div class="col-md-2 center" style="margin-top: 40px;">
+                <button class="btn btn-danger w-100 remove-history" style="color: black;">Clear History</button>
+            </div>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
